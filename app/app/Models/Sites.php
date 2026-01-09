@@ -15,6 +15,6 @@ class Sites extends Model
 
     public function sections()
     {
-        return $this->hasMany(SiteSection::class);
-    }   
+        return $this->hasMany(SiteSection::class, 'site_id');
+    }
 }

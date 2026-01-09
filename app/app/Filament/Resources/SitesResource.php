@@ -31,12 +31,12 @@ class SitesResource extends Resource
                     ->dateTime('d-m-Y H:i')
                     ->sortable(),
 
-                Tables\Columns\TextColumn::make('slug')
+                Tables\Columns\TextColumn::make('uuid')
                     ->label('Podgląd')
                     ->formatStateUsing(fn () => 'Otwórz stronę')
                     ->icon('heroicon-o-arrow-top-right-on-square')
                     ->color('primary')
-                    ->url(fn (Sites $record) => url('/preview/' . $record->slug)) 
+                    ->url(fn (Sites $record) => url('/preview/' . $record->uuid)) 
                     ->openUrlInNewTab(),
             ])
             ->actions([

@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Filament\Notifications\Notification;
 
 use App\AI\Services\OpenRouterAPI; 
-use App\AI\Prompts\LandingPagePrompt;
+use App\AI\Prompts\AIPrompt;
 
 class CreateSites extends CreateRecord
 {
@@ -20,7 +20,7 @@ class CreateSites extends CreateRecord
 
     protected function mutateFormDataBeforeCreate(array $data): array
     {
-        $prompt = LandingPagePrompt::make($data['company_description']);
+        $prompt = AIPrompt::make($data['company_description']);
         $api = new OpenRouterAPI();
         
         try {
@@ -46,7 +46,7 @@ class CreateSites extends CreateRecord
         }
         
         $data['user_id'] = Auth::id();
-        $data['slug'] = Str::slug($data['title']) . '-' . Str::random(6);
+        $data['uuid'] = (string) Str::uuid();
         
         return $data;
     }

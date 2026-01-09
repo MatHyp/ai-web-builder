@@ -18,6 +18,6 @@ class SiteSection extends Model
 
     public function site()
     {
-        return $this->belongsTo(Sites::class);
+            return $this->belongsTo(Sites::class, 'site_id');
     }
 }
