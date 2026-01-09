@@ -3,23 +3,69 @@
 namespace App\Filament\Resources\SitesResource\Pages;
 
 use App\Filament\Resources\SitesResource;
-use Filament\Actions;
 use Filament\Resources\Pages\CreateRecord;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
+use Filament\Notifications\Notification;
+
+use App\AI\Services\OpenRouterAPI; 
+use App\AI\Prompts\LandingPagePrompt;
 
 class CreateSites extends CreateRecord
 {
     protected static string $resource = SitesResource::class;
-
+    protected array $generatedSections = [];
 
     protected function mutateFormDataBeforeCreate(array $data): array
     {
+        $prompt = LandingPagePrompt::make($data['company_description']);
+        $api = new OpenRouterAPI();
+        
+        try {
+            $apiResponse = $api->apiCall($prompt);
+            $content = $apiResponse['choices'][0]['message']['content'];
+            
+            $decodedSections = json_decode($content, true);
+
+            if (!is_array($decodedSections)) {
+                 throw new \Exception('AI zwróciło nieprawidłowy format danych.');
+            }
+
+            $this->generatedSections = $decodedSections;
+
+        } catch (\Exception $e) {
+            Notification::make()
+                ->title('Błąd AI')
+                ->body($e->getMessage())
+                ->danger()
+                ->send();
+            
+            $this->halt();
+        }
+        
         $data['user_id'] = Auth::id();
         $data['slug'] = Str::slug($data['title']) . '-' . Str::random(6);
+        
         return $data;
+    }
+
+    protected function afterCreate(): void
+    {
+        $site = $this->record; 
+
+        foreach ($this->generatedSections as $section) {
+            if (!isset($section['type']) || !isset($section['data'])) {
+                continue;
+            }
+
+            \App\Models\SiteSection::create([
+                'site_id' => $site->id,
+                'type' => $section['type'],
+                'data' => $section['data'], 
+            ]);
+        }
     }
 
     public function form(Form $form): Form
@@ -36,8 +82,6 @@ class CreateSites extends CreateRecord
                     ->helperText('Opisz czym zajmuje się firma. AI na tej podstawie wygeneruje stronę.')
                     ->required()
                     ->rows(5)
-                    ->dehydrated(false), 
-                    
                 ]);
     }
 }

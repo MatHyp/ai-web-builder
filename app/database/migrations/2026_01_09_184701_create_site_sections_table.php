@@ -8,18 +8,20 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('sites', function (Blueprint $table) {
+        Schema::create('site_sections', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete(); 
-            $table->string('title');
-            $table->string('slug')->unique();
-            $table->text('company_description')->nullable();
+
+            $table->foreignId('site_id')
+                ->constrained()
+                ->cascadeOnDelete();
+            $table->string('type');
+            $table->json('data');
             $table->timestamps();
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('sites');
+        Schema::dropIfExists('site_sections');
     }
 };
