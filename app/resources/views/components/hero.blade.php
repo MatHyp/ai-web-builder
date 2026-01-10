@@ -1,9 +1,9 @@
 @props(['data'])
 
-<section class="relative bg-white overflow-hidden">
-    <div class="max-w-7xl mx-auto">
-        <div class="relative z-10 pb-8 bg-white sm:pb-16 md:pb-20 lg:max-w-2xl lg:w-full lg:pb-28 xl:pb-32">
-            <main class="mt-10 mx-auto max-w-7xl px-4 sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 lg:px-8 xl:mt-28">
+<section class="relative bg-white overflow-hidden min-h-[90vh] flex items-center">
+    <div class="max-w-7xl mx-auto w-full">
+        <div class="relative z-10 bg-white lg:max-w-2xl lg:w-full pb-12 lg:pb-0">
+            <main class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
                 <div class="sm:text-center lg:text-left">
                     <h1 class="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
                         <span class="block xl:inline">{{ $data['title'] ?? 'Witaj' }}</span>
@@ -24,7 +24,12 @@
             </main>
         </div>
     </div>
-    <div class="lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2 bg-gray-100 flex items-center justify-center">
-        <span class="text-gray-400 font-bold text-xl">Hero Image Placeholder</span>
+    
+    <div class="lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2 bg-gray-100 h-full lg:rounded-tl-full lg:rounded-bl-full overflow-hidden shadow-xl lg:ml-12">
+        <img 
+            src="{{ $data['image_url'] ?? 'https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-1.2.1&auto=format&fit=crop&w=2850&q=80' }}" 
+            alt="{{ $data['title'] ?? 'Hero image' }}"
+            class="h-full w-full object-cover object-center"
+        >
     </div>
 </section>
