@@ -9,6 +9,9 @@ use Filament\Forms\Form;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Filament\Notifications\Notification;
+use Filament\Forms\Components\Section;
+use Filament\Forms\Components\View; 
+
 
 use App\AI\Services\OpenRouterAPI; 
 use App\AI\Prompts\AIPrompt;
@@ -55,9 +58,15 @@ class CreateSites extends CreateRecord
     {
         $site = $this->record; 
 
+        $allowedTypes = ['hero', 'about', 'features', 'services', 'pricing', 'testimonials', 'contact'];
+
         foreach ($this->generatedSections as $section) {
             if (!isset($section['type']) || !isset($section['data'])) {
                 continue;
+            }
+
+            if (!in_array($section['type'], $allowedTypes)) {
+                continue; 
             }
 
             \App\Models\SiteSection::create([
@@ -68,20 +77,29 @@ class CreateSites extends CreateRecord
         }
     }
 
-    public function form(Form $form): Form
-    {
-        return $form
-            ->schema([
-                Forms\Components\TextInput::make('title')
-                    ->label('Nazwa projektu')
-                    ->required()
-                    ->placeholder('Np. Moja Kawiarnia'),
+public function form(Form $form): Form
+{
+    return $form
+        ->schema([
+            Section::make('Szczegóły Generowania')
+                ->description('Wprowadź dane firmy, a sztuczna inteligencja przygotuje propozycję strony.')
+                ->icon('heroicon-o-sparkles')
+                ->schema([
+                    Forms\Components\TextInput::make('title')
+                        ->label('Nazwa firmy')
+                        ->required()
+                        ->placeholder('Np. Moja Kawiarnia'),
+                        
+                    Forms\Components\Textarea::make('company_description')
+                        ->label('Opis firmy (dla AI)')
+                        ->helperText('Opisz czym zajmuje się firma...')
+                        ->required()
+                        ->rows(5)
+                        ->autosize(),
+                ])
+                ->columns(1),
 
-                Forms\Components\Textarea::make('company_description')
-                    ->label('Opis firmy (dla AI)')
-                    ->helperText('Opisz czym zajmuje się firma. AI na tej podstawie wygeneruje stronę.')
-                    ->required()
-                    ->rows(5)
-                ]);
-    }
+                View::make('filament.components.ai-loader'), 
+        ]);
+}
 }
