@@ -90,26 +90,36 @@ class AIPrompt
 
         return <<<EOT
             Jesteś architektem stron internetowych i copywriterem.
-            Twoim zadaniem jest stworzenie struktury Landing Page w formacie JSON dla firmy opisanej poniżej.
+            Twoim zadaniem jest stworzenie struktury Landing Page w formacie JSON dla firmy opisanej poniżej oraz dobranie kolorystyki.
 
             OPIS FIRMY:
             "{$description}"
 
+            DOSTĘPNE KOLORY:
+            [slate, gray, zinc, neutral, stone, red, orange, amber, yellow, lime, green, emerald, teal, cyan, sky, blue, indigo, violet, purple, fuchsia, pink, rose]
+
             ZASADY GENEROWANIA (BARDZO WAŻNE):
-            1. Przeanalizuj opis firmy.
+            1. Przeanalizuj opis i wybierz jeden kolor z listy powyżej, który najlepiej oddaje charakter branży (np. natura = green, technologia = blue, energia = red).
             2. Z poniższej "BIBLIOTEKI SEKCJI" wybierz TYLKO te sekcje, które pasują do opisu.
             3. Jeśli w opisie nie ma mowy o cenach lub konkretnych pakietach, NIE generuj sekcji 'pricing'.
             4. Jeśli opis jest bardzo krótki, wygeneruj tylko podstawowe sekcje (hero, about, contact).
-            5. Zawsze zachowaj logiczną kolejność: Hero -> About -> Services/Features -> Pricing (jeśli jest) -> Testimonials -> Contact.
+            5. Zawsze zachowaj logiczną kolejność sekcji.
             6. Wypełnij pola `data` kreatywną treścią sprzedażową w języku polskim.
 
             BIBLIOTEKA DOSTĘPNYCH SEKCJI (SCHEMATY):
             {$schemaString}
 
-            Twoja odpowiedź musi być TYLKO poprawnym tablicą JSON (Array of Objects).
-            Nie dodawaj żadnego tekstu przed ani po JSON.
+            FORMAT ODPOWIEDZI (WYMAGANY):
+            Twoja odpowiedź musi być TYLKO poprawną tablicą JSON.
+            
+            BARDZO WAŻNE: Pierwszym elementem tablicy MUSI BYĆ obiekt definiujący wybrany kolor w formacie:
+            { "type": "theme_settings", "data": { "theme": "nazwa_wybranego_koloru" } }
+
+            Dopiero po nim następują wybrane sekcje strony.
+
             Przykład struktury wyjściowej:
             [
+                { "type": "theme_settings", "data": { "theme": "red" } },
                 { "type": "hero", "data": { ... } },
                 { "type": "about", "data": { ... } },
                 { "type": "contact", "data": { ... } }

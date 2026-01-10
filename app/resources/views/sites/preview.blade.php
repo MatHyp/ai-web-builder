@@ -9,9 +9,19 @@
     <style>
         body { font-family: 'Inter', sans-serif; }
         html { scroll-behavior: smooth; }
-</style>
-
     </style>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: tailwind.colors['{{ $site->theme ?? "indigo" }}'],
+                    }
+                }
+            }
+        }
+    </script>
 </head>
 
 <nav class="fixed top-0 left-0 z-50 w-full bg-white/80 backdrop-blur border-b border-gray-200">
@@ -30,9 +40,7 @@
                             {{ ucfirst($section->type) }}
                         </a>
 
-                    @endforeach
-
-              
+                    @endforeach  
             </div>
         </div>
     </div>
@@ -47,10 +55,12 @@
                 <x-hero :data="$section->data" />
             @elseif($section->type === 'about')
                 <x-about :data="$section->data" />
-            @elseif($section->type === 'services') <x-services :data="$section->data" />
+            @elseif($section->type === 'services') 
+                <x-services :data="$section->data" />
             @elseif($section->type === 'features')
                 <x-features :data="$section->data" />
-            @elseif($section->type === 'pricing')  <x-pricing :data="$section->data" />
+            @elseif($section->type === 'pricing')  
+                <x-pricing :data="$section->data" />
             @elseif($section->type === 'testimonials')
                 <x-testimonials :data="$section->data" />
             @elseif($section->type === 'contact')

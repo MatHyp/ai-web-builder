@@ -30,16 +30,26 @@ class CreateSites extends CreateRecord
             $apiResponse = $api->apiCall($prompt);
             $content = $apiResponse['choices'][0]['message']['content'];
             
+
             $decodedSections = json_decode($content, true);
 
             if (!is_array($decodedSections)) {
-                 throw new \Exception('AI zwróciło nieprawidłowy format danych.');
+                    throw new \Exception('Błąd formatu AI');
             }
 
-            $this->generatedSections = $decodedSections;
+            $themeColor = 'indigo';
+            foreach ($decodedSections as $key => $section) {
+                if (isset($section['type']) && $section['type'] === 'theme_settings') {
+                    $themeColor = $section['data']['theme'] ?? 'indigo'; 
+                    unset($decodedSections[$key]);
+                }
+            }
+            $this->generatedSections = array_values($decodedSections);
+            
+            $data['theme'] = $themeColor;
 
-        } catch (\Exception $e) {
-            Notification::make()
+        } catch (\Exception $e) {            
+                Notification::make()
                 ->title('Błąd AI')
                 ->body($e->getMessage())
                 ->danger()
