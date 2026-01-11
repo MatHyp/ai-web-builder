@@ -1,35 +1,33 @@
 @props(['data'])
 
-<section class="relative bg-white overflow-hidden min-h-[90vh] flex items-center">
-    <div class="max-w-7xl mx-auto w-full">
-        <div class="relative z-10 bg-white lg:max-w-2xl lg:w-full pb-12 lg:pb-0">
-            <main class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
-                <div class="sm:text-center lg:text-left">
-                    <h1 class="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
-                        <span class="block xl:inline">{{ $data['title'] ?? 'Witaj' }}</span>
-                    </h1>
-                    <p class="mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
-                        {{ $data['subtitle'] ?? '' }}
-                    </p>
-                    <div class="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start">
-                        @if(isset($data['cta_text']))
-                        <div class="rounded-md shadow">
-                            <a href="#" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 md:py-4 md:text-lg md:px-10">
-                                {{ $data['cta_text'] }}
-                            </a>
-                        </div>
-                        @endif
-                    </div>
-                </div>
-            </main>
+<section class="relative isolate bg-white px-6 pt-14 lg:px-8 min-h-[90vh] flex items-center justify-center overflow-hidden">
+    <div class="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80" aria-hidden="true">
+        <div class="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]" style="clip-path: polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)"></div>
+    </div>
+
+    <div class="mx-auto max-w-4xl py-12 sm:py-20 lg:py-24">
+        <div class="text-center">
+            <h1 class="text-5xl font-extrabold tracking-tight text-gray-900 sm:text-7xl md:text-8xl mb-6">
+                {{ $data['title'] ?? 'Witaj' }}
+            </h1>
+            
+            <p class="mt-6 text-lg leading-8 text-gray-600 sm:text-xl md:text-2xl max-w-2xl mx-auto">
+                {{ $data['subtitle'] ?? '' }}
+            </p>
+            
+            <div class="mt-10 flex items-center justify-center gap-x-6">
+                @if(isset($data['cta_text']))
+                    <a href="#" class="rounded-md bg-primary-600 px-8 py-3.5 text-lg font-semibold text-white shadow-sm hover:bg-primary-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600 transition-all transform hover:scale-105">
+                        {{ $data['cta_text'] }}
+                    </a>
+                @endif
+                
+                {{-- <a href="#" class="text-sm font-semibold leading-6 text-gray-900">Dowiedz się więcej <span aria-hidden="true">→</span></a> --}}
+            </div>
         </div>
     </div>
-    
-    <div class="lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2 bg-gray-100 h-full lg:rounded-tl-full lg:rounded-bl-full overflow-hidden shadow-xl lg:ml-12">
-        <img 
-            src="{{ $data['image_url'] ?? 'https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-1.2.1&auto=format&fit=crop&w=2850&q=80' }}" 
-            alt="{{ $data['title'] ?? 'Hero image' }}"
-            class="h-full w-full object-cover object-center"
-        >
+
+    <div class="absolute inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]" aria-hidden="true">
+        <div class="relative left-[calc(50%+3rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%+36rem)] sm:w-[72.1875rem]" style="clip-path: polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)"></div>
     </div>
 </section>
