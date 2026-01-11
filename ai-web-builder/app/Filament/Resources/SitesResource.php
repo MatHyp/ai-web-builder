@@ -4,18 +4,20 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\SitesResource\Pages;
 use App\Filament\Resources\SitesResource\RelationManagers;
-use App\Models\Sites; 
+use App\Models\Site; 
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Auth;
 
 class SitesResource extends Resource
 {
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $model = Site::class;
 
     public static function table(Table $table): Table
     {
@@ -36,7 +38,7 @@ class SitesResource extends Resource
                     ->formatStateUsing(fn () => 'Otwórz stronę')
                     ->icon('heroicon-o-arrow-top-right-on-square')
                     ->color('primary')
-                    ->url(fn (Sites $record) => url('/preview/' . $record->uuid)) 
+                    ->url(fn (Site $record) => url('/preview/' . $record->uuid)) 
                     ->openUrlInNewTab(),
             ])
             ->actions([
@@ -51,7 +53,8 @@ class SitesResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()->where('user_id', auth()->id());
+        return parent::getEloquentQuery()
+            ->where('user_id', Auth::id());
     }
 
     public static function getPages(): array

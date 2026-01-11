@@ -12,15 +12,16 @@ class OpenRouterAPI
      */
     public function apiCall($prompt)
     {
-        $apiKey = env('OPENROUTER_API_KEY');
-        $apiUrl = env('OPENROUTER_API_URL');
+        $apiKey = config('services.openrouter.key');
+        $apiUrl = config('services.openrouter.url');
+        $apiModel = config('services.openrouter.model');
 
         /** @var Response $response */
         $response = Http::withHeaders([
             'Authorization' => 'Bearer ' . $apiKey,
             'Content-Type' => 'application/json',
         ])->post($apiUrl, [
-            'model' => 'openai/gpt-oss-20b:free',
+            'model' => $apiModel,
             'messages' => [
                 ['role' => 'user', 'content' => $prompt]
             ],

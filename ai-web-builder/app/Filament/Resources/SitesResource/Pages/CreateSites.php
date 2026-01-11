@@ -12,7 +12,7 @@ use Filament\Notifications\Notification;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\View; 
 
-
+use App\Services\SiteGeneratorService;
 use App\AI\Services\OpenRouterAPI; 
 use App\AI\Prompts\AIPrompt;
 
@@ -23,44 +23,22 @@ class CreateSites extends CreateRecord
 
     protected function mutateFormDataBeforeCreate(array $data): array
     {
-        $prompt = AIPrompt::make($data['company_description']);
-        $api = new OpenRouterAPI();
         
         try {
-            $apiResponse = $api->apiCall($prompt);
-            $content = $apiResponse['choices'][0]['message']['content'];
-            
+            $service = new SiteGeneratorService(new OpenRouterAPI());
+            $generated = $service->generate($data['company_description']);
 
-            $decodedSections = json_decode($content, true);
-
-            if (!is_array($decodedSections)) {
-                    throw new \Exception('Błąd formatu AI');
-            }
-
-            $themeColor = 'indigo';
-            foreach ($decodedSections as $key => $section) {
-                if (isset($section['type']) && $section['type'] === 'theme_settings') {
-                    $themeColor = $section['data']['theme'] ?? 'indigo'; 
-                    unset($decodedSections[$key]);
-                }
-            }
-            $this->generatedSections = array_values($decodedSections);
-            
-            $data['theme'] = $themeColor;
-
-        } catch (\Exception $e) {            
-                Notification::make()
-                ->title('Błąd AI')
-                ->body($e->getMessage())
-                ->danger()
-                ->send();
-            
-            $this->halt();
+            $this->generatedSections = $generated['sections'];
+                
+            $data['theme'] = $generated['theme'];
+            $data['user_id'] = Auth::id();
+            $data['uuid'] = (string) Str::uuid();
+        } 
+        catch (\Exception $e) {
+                Notification::make()->title('Błąd')->body($e->getMessage())->danger()->send();
+                $this->halt();
         }
-        
-        $data['user_id'] = Auth::id();
-        $data['uuid'] = (string) Str::uuid();
-        
+
         return $data;
     }
 

@@ -35,4 +35,10 @@ return [
         ],
     ],
 
+    'openrouter' => [
+        'key' => env('OPENROUTER_API_KEY'),
+        'url' => env('OPENROUTER_API_URL'),
+        'model' => env('OPENROUTER_MODEL', 'openai/gpt-oss-20b:free'),
+    ],
+
 ];

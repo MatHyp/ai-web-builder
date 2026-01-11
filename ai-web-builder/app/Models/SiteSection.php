@@ -16,8 +16,7 @@ class SiteSection extends Model
         'data' => 'array',
     ];
 
-    public function site()
-    {
-            return $this->belongsTo(Sites::class, 'site_id');
+    public function site() { 
+        return $this->belongsTo(Site::class); 
     }
 }

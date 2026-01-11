@@ -49,23 +49,14 @@
 
 <body class="bg-gray-50 text-gray-900 antialiased">
 
+
+
     @foreach($site->sections as $section)
         <section id="{{ $section->type }}" class="scroll-mt-16">
-            @if($section->type === 'hero')
-                <x-hero :data="$section->data" />
-            @elseif($section->type === 'about')
-                <x-about :data="$section->data" />
-            @elseif($section->type === 'services') 
-                <x-services :data="$section->data" />
-            @elseif($section->type === 'features')
-                <x-features :data="$section->data" />
-            @elseif($section->type === 'pricing')  
-                <x-pricing :data="$section->data" />
-            @elseif($section->type === 'testimonials')
-                <x-testimonials :data="$section->data" />
-            @elseif($section->type === 'contact')
-                <x-contact :data="$section->data" />
-            @endif
+            <x-dynamic-component 
+                :component="$section->type" 
+                :data="$section->data" 
+            />
         </section>
     @endforeach
 
